@@ -1,0 +1,296 @@
+<!DOCTYPE html><html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pasargad Restaurant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-color: #f4f7ff;
+      --text-color: #2e2e2e;
+      --card-bg: #ffffff;
+      --filter-bg: #d5dde0;
+      --primary: #2b3852;
+      --secondary: #546c8c;
+      --accent: #7ab4d6;
+    }
+    body.dark {
+      --bg-color: #1f1f1f;
+      --text-color: #eaeaea;
+      --card-bg: #2c2c2c;
+      --filter-bg: #3a3a3a;
+      --primary: #6a84b8;
+      --secondary: #556eff;
+      --accent: #abc8fd;
+    }
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      transition: background 0.3s, color 0.3s;
+    }
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+    .top-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px;
+    }
+    .top-buttons button {
+      background: var(--secondary);
+      color: rgb(255, 255, 255);
+      border: none;
+      padding: 10px 18px;
+      border-radius: 24px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      background-color: var(--filter-bg);
+      padding: 10px 20px;
+    }
+    .filters button {
+      background: var(--primary);
+      color: rgb(255, 255, 255);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: 'vazirmatn';
+      font-size: 20px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .filters button.active {
+      background: var(--accent);
+      font-weight: bold;
+      border: 2px solid white;
+    }
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 22px;
+      padding: 18px;
+    }
+    .card h3 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 18px;
+    }
+    .card p {
+      margin-bottom: 0;
+      font-weight: bold;
+      font-size: 16px;
+      color: var(--text-color);
+    }
+    .card {
+      direction: ltr;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      padding: 16px;
+      width: 320px;
+    }
+    .menu-image {
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 70px;
+    }
+    .menu-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="title">رستوران پاسارگاد</h1>
+  </header>
+  <div class="top-buttons">
+    <button onclick="toggleTheme()"> Mode</button>
+    <button onclick="toggleLanguage()">فارسی/English </button>
+  </div>
+  <div class="filters" id="mainFilters"></div>
+  <div class="menu" id="menu"></div>
+  <script>
+    const menuData = [
+      {
+        key: ["کباب ها ", "Kebabs "],
+        items: [
+  ["کباب لقمه پاسارگاد", "Pasargad Loghmeh Kebab", "375","https://lunisia.github.io/Restaurant/loqme.jpg"],
+  ["کباب مدیترانه", "Mediterranean Kebab", "380","https://lunisia.github.io/Restaurant/medi.jpg"],
+  ["کباب کوبیده", "Koobideh Kebab", "355","https://lunisia.github.io/Restaurant/koobideh.jpg"],
+  ["کباب وزیری", "Vaziri Kebab ", "375",""],
+  ["کباب کوبیده نگین دار", "Negini Kebab", "360","https://lunisia.github.io/Restaurant/vaziri.jpg"],
+  ["جوجه زعفرانی", "Saffron Chicken Kebab", "320","https://lunisia.github.io/Restaurant/saffron.jpg"],
+  ["جوجه لاری", "Lari Chicken Kebab", "350","https://lunisia.github.io/Restaurant/diet.jpg"],
+  ["کباب تونسی", "Tunisian Kebab", "390","https://lunisia.github.io/Restaurant/toonesi2.jpg"],
+  ["کباب کوبیده ساتوری", "Satori Kebab", "390","https://lunisia.github.io/Restaurant/satoori.jpg"],
+  ["کباب چنجه", "Chenjeh Kebab", "475","https://lunisia.github.io/Restaurant/chen.jpg"],
+  ["کباب برگ ممتاز", "Premium Barg Kebab", "565","https://lunisia.github.io/Restaurant/barg.jpg"],
+  ["کباب بختیاری", "Bakhtiari Kebab ", "455","https://lunisia.github.io/Restaurant/vaziri2.jpg"],
+  ["کباب سلطانی", "Soltani Kebab", "775","https://lunisia.github.io/Restaurant/soltani.jpg"],
+  ["کباب هاشمی", "Hashemi Kebab", "570","https://lunisia.github.io/Restaurant/hashemi2.jpg"],
+  ["کباب محلی گیلانی", "Gilani Local Style Kebab", "460","https://lunisia.github.io/Restaurant/gilan.jpg"],
+  ["کباب بره", "Lamb Kebab", "920"],
+  ["تکه ماستی", "Mast Tikeh ", "460","https://lunisia.github.io/Restaurant/mast.jpg"],
+  ["شیشلیک شاندیز", "Shandiz Shishlik", "975","https://lunisia.github.io/Restaurant/shish.jpg"],
+  ["فیله پیج مخصوص", "Special Rolled Beef Fillet  ", "750","https://lunisia.github.io/Restaurant/fillet.jpg"]
+]
+
+      },
+      {
+        key: ["سینی مخصوص", "Special Platters"],
+        items: [
+          ["سینی پاسارگاد", "Pasargad Platter", "1,590", "https://lunisia.github.io/Restaurant/pasargad.jpg"],
+          ["سینی درباری", "Royal Platter", "1,590", "https://lunisia.github.io/Restaurant/darbar.jpg"],
+          ["سینی دونفره", "Platter For Two", "1,590", "https://lunisia.github.io/Restaurant/sini2nfre.jpg"]
+          ]
+      },
+      {
+        key: ["خورشت ها", "Persian Stews"],
+        items: [
+          [" قیمه نثار", "Gheimeh Nesar ", "350","https://lunisia.github.io/Restaurant/nesar.jpg"],
+          [" قرمه سبزی ", "Ghormeh Sabzi", "350","https://lunisia.github.io/Restaurant/akbar.jpg"],
+          [" اکبر جوجه", "Akbar Joojeh", "350","https://lunisia.github.io/Restaurant/akbar.jpg"],
+          [" زرشک پلو با مرغ ", "Zereshk Polo", "350","https://lunisia.github.io/Restaurant/zereshk.jpg"],
+          ["ماهیچه", "Lamb Shank", "350","https://lunisia.github.io/Restaurant/mahiche.jpg"],
+          ["گردن", "Braised Lamb Neck", "350","https://lunisia.github.io/Restaurant/grdn.jpg"]
+        ]
+      },
+      {
+        key: ["غذای ملل","International Dishes"],
+        items: [
+          [" آدانا کباب", "Adana Kebab ", "360","https://lunisia.github.io/Restaurant/adana (2).jpg"],
+          [" جوجه تندوری", "Tandoori Chicken", "440","https://lunisia.github.io/Restaurant/tndri.jpg"],
+          [" کباب ازمیر", "Izmir Kebab ", "345","https://lunisia.github.io/Restaurant/tndri.jpg"]
+
+        ]
+      },
+      {
+        key: [" پلو ها", "Rice Dishes"],
+        items: [
+          [" پلو ساده", "Plain Rice", ",","https://lunisia.github.io/Restaurant/polo.jpg"],
+          [" سبزی پلو ", "Herbed Rice ", ""],
+          [" شوید پلو ", " Dill Rice", ""],
+          [" باقالی پلو ", "Dill & Fava Bean Rice ", ""]
+        ]
+      },
+      {
+        key: ["پیش غذا", "Appetizers"],
+        items: [
+          [" سالاد فصل", "Seasonal Salad", "260,000","https://lunisia.github.io/Restaurant/fasl.jpg"],
+          [" سالاد شیرازی ", "Shirazi Salad", "260,000","https://lunisia.github.io/Restaurant/shiraz.jpg"],
+          [" بورانی بادمجان ", "Eggplant Borani", "260,000","https://lunisia.github.io/Restaurant/fasl.jpg"],
+          [" ماست و خیار ", "Yogurt & Cucumber", "260,000","https://lunisia.github.io/Restaurant/fasl.jpg"],
+          [" میرزا قاسمی ", "Mirza Ghasemi", "260,000","https://lunisia.github.io/Restaurant/mir.jpg"],
+          [" کشک بادمجان ", "Kashk-e Bademjan", "260,000","https://lunisia.github.io/Restaurant/kashk.jpg"],
+          [" سوپ جو ", "Barley Soup", "260,000","https://lunisia.github.io/Restaurant/jo.jpg"],
+          [" سوپ قارچ ", "Mushroom Soup", "260,000","https://lunisia.github.io/Restaurant/mashroom.jpg"],
+          [" زیتون  ", "Olives", "260,000","https://lunisia.github.io/Restaurant/olive.jpg"],
+          [" زیتون پرورده ", "Marinated Olives", "260,000","https://lunisia.github.io/Restaurant/olive2.jpg"],
+          ["ماست چکیده", "Strained Yogurt ", "260,000","https://lunisia.github.io/Restaurant/fasl.jpg"],
+          [" ماست موسیر ", "Yogurt & Shallot ", "260,000","https://lunisia.github.io/Restaurant/fasl.jpg"]
+        ]
+      },
+      {
+        key: ["نوشیدنی", "Drinks"],
+        items: [
+          ["کوکا ", " ", "260,000"]
+        ]
+      }
+    ];let isFarsi = true;
+let currentMain = 0;
+
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+}
+
+function toggleLanguage() {
+  isFarsi = !isFarsi;
+  document.getElementById("title").textContent = isFarsi ? " رستوران پاسارگاد" : "Pasargad Restaurant";
+  renderMainFilters();
+  renderItems(currentMain);
+}
+
+function renderMainFilters() {
+  const container = document.getElementById("mainFilters");
+  container.innerHTML = "";
+  menuData.forEach((section, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = section.key[isFarsi ? 0 : 1];
+    btn.classList.toggle("active", index === currentMain);
+    btn.onclick = () => {
+      currentMain = index;
+      renderMainFilters();
+      renderItems(index);
+    };
+    container.appendChild(btn);
+  });
+}
+
+function renderItems(mainIndex) {
+  const container = document.getElementById("menu");
+  container.innerHTML = "";
+
+  const items = menuData[mainIndex].items;
+  items.forEach(([fa, en, price, imgSrc]) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const image = document.createElement("img");
+    image.src = imgSrc || "";
+    image.alt = fa;
+    image.className = "menu-image";
+
+    const content = document.createElement("div");
+    content.className = "menu-content";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = isFarsi ? fa : en;
+
+    const p = document.createElement("p");
+    p.textContent = price + (isFarsi ? " تومان" : " Toman");
+
+    content.appendChild(h3);
+    content.appendChild(p);
+
+    card.appendChild(image);
+    card.appendChild(content);
+
+    container.appendChild(card);
+  });
+}
+
+renderMainFilters();
+renderItems(currentMain);
+
+  </script>
+</body>
+</html>
